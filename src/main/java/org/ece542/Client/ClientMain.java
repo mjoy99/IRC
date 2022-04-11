@@ -9,19 +9,15 @@ public class ClientMain {
      * @param args
      */
     public static void main(String[] args) {
-
-        String hostname = "localhost";
+        //client info
+        String hostname = args[0];
         int portnum = 5555;
-
-        IRCClientSocket ircClientSocket = new IRCClientSocket();
-        IRCClientUI ircClientUI = new IRCClientUI();
-
-        ircClientUI.start();
-
-        ircClientSocket.start(portnum, hostname);
-
-        while(true){
-            //todo main loop to take in chat inputs and listen for messages from server
-        }
+        String username = " ";  //will be set by user later
+        
+        //creating new client
+        IRCClient client = new IRCClient(hostname, portnum, username);
+        
+        //starting up client connection
+        client.connectSocket();
     }
 }
