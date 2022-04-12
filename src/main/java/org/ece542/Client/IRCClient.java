@@ -2,6 +2,7 @@ package org.ece542.Client;
 
 import java.io.IOException;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 /**
  * Creates new IRCClient object with socket and 2 threads for simultaneous reading from and writing to server
@@ -16,12 +17,11 @@ public class IRCClient {
      * Effects: Constructor for IRCClient
      * @param hostname String IP Address or hostname of the server connecting to.
      * @param portnum portnum used for IRC server
-	 * @param username : the username the user wishes to select
+	 *
      */
-    public IRCClient(String hostname,int portnum, String username){
+    public IRCClient(String hostname,int portnum){
         this.hostname = hostname;
         this.portnum = portnum;
-        this.username = username;
     }
     
     /**
@@ -30,18 +30,20 @@ public class IRCClient {
      *          Also Attaches input stream and output stream of Socket.
      */
     public void connectSocket(){
+        System.out.println("Enter your username for the chat:");
+
 		if(hostname != null && !(hostname.isEmpty()) && portnum>0){
 			try {
 				this.clientSocket = new Socket(hostname, portnum);
-				system.out.println("Socket is Connected");
+				System.out.println("Socket is Connected");
 				//instantiates and starts the 2 threads for simultaneous reading from server and writing to server
-				new IRCreadingThread(socket, this).start();
-				new IRCwritingThread(socket, this).start();
+				new IRCreadingThread(clientSocket, this).start();
+				new IRCwritingThread(clientSocket, this).start();
 	 
 			} catch (UnknownHostException e) {
 				System.out.println("Server Not Located "+e.getMessage());
 			} catch (IOException ex) {
-				System.out.println("I/O Error: "+e.getMessage());
+				System.out.println("I/O Error: "+ex.getMessage());
 			}
 		}
 		else
@@ -51,7 +53,7 @@ public class IRCClient {
 	/**
      * Effects: returns the client's username
      */
-    public String getUsername(){
+    public String getUserName(){
         return username;
     }
 	
