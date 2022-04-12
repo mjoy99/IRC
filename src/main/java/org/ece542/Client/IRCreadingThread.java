@@ -30,7 +30,8 @@ public class IRCreadingThread extends Thread {
             InputStream serverMessage = clientSocket.getInputStream();
             reader = new BufferedReader(new InputStreamReader(serverMessage));
         } catch (Exception ex) {
-            System.out.println("Error Attaching ServerMessage Stream to reader " + ex.getMessage());
+            System.out.println("Class: IRCreadingThread. Method: Constructor. Error Attaching " +
+                    "ServerMessage Stream to reader " + ex.getMessage());
             ex.printStackTrace();
         }
     }
@@ -45,7 +46,7 @@ public class IRCreadingThread extends Thread {
                 System.out.println("\n" + reader.readLine());
  
                 // prints the username 
-                if (client.getUsername() != null) {
+                if (client.getUserName() != null) {
                     System.out.print("{" + client.getUserName() + "}: ");
                 }
             } catch (IOException e) {
