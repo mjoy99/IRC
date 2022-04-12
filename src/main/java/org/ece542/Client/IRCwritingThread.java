@@ -12,7 +12,7 @@ public class IRCwritingThread extends Thread {
     
 	private Socket clientSocket;
 	private IRCClient client;
-	private PrintmessageWriter messageWriter;
+	private PrintWriter messageWriter;
  
 	/**
 	 * Effects: attaches user input to client's socket output stream
@@ -43,7 +43,7 @@ public class IRCwritingThread extends Thread {
         //sending username to the server
 		messageWriter.println(username);
 		//Explaining How To Disconnect to User:
-		system.out.println("To Disconnect From Chat, Type In \"DONE!\" ");
+		System.out.println("To Disconnect From Chat, Type In \"!Exit\" ");
  
         String userInput;
  
@@ -55,12 +55,12 @@ public class IRCwritingThread extends Thread {
  
 		//once user wishes to disconnect, close output stream, printwriter object stream, and socket connection
         try {
-			dataOut.close();
+			//dataOut.close();
 			messageWriter.close();
             clientSocket.close();
         } catch (Exception e) {
  
-            System.out.println("ERROR @ IRCwritingThread disconnect block: "e.getMessage());
+            System.out.println("ERROR @ IRCwritingThread disconnect block: "+ e.getMessage());
         }
     }
 }
