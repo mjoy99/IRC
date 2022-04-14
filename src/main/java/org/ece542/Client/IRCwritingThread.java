@@ -17,12 +17,13 @@ public class IRCwritingThread extends Thread {
 	/**
 	 * Effects: attaches user input to client's socket output stream
 	 *
-	 *@param clientSocket : the client's socket used to send data to server 
+	 *
 	 *@param client : the client object this IRCwritingThread is used for
 	 */
-    public IRCwritingThread(Socket clientSocket, IRCClient client) {
-        this.clientSocket = clientSocket;
+    public IRCwritingThread(IRCClient client) {
+
 		this.client = client;
+        this.clientSocket = client.getSocket();
         
         try {
             OutputStream dataOut = clientSocket.getOutputStream();
@@ -39,7 +40,7 @@ public class IRCwritingThread extends Thread {
 		
         //prompting user for username
 		String username = console.readLine("\nPlease Select A Username: ");
-        client.changeUsername(username);
+        client.setUsername(username);
         //sending username to the server
 		messageWriter.println(username);
 		//Explaining How To Disconnect to User:
@@ -49,14 +50,18 @@ public class IRCwritingThread extends Thread {
  
         do {
             userInput = console.readLine("{" + username + "}:\t");
+
             messageWriter.println(userInput);
- 
-        } while (!userInput.equals("DONE!"));
- 
+
+
+        } while (!userInput.equalsIgnoreCase("!exit"));
+
+        //update flag that socket is being closed.
+        client.socketConnected.set(false);
+
 		//once user wishes to disconnect, close output stream, printwriter object stream, and socket connection
         try {
-			//dataOut.close();
-			messageWriter.close();
+
             clientSocket.close();
         } catch (Exception e) {
  

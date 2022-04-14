@@ -19,13 +19,14 @@ public class IRCreadingThread extends Thread {
 	/**
 	 * Constructor for the reading thread.
 	 * 
-	 *@param clientSocket : the client's socket object
-	 *@param client : the client this read is used for
+	 *
+	 *@param client : the client this reader is used for
 	 */
-    public IRCreadingThread(Socket clientSocket, IRCClient client) {
-        this.clientSocket = clientSocket;
+    public IRCreadingThread(IRCClient client) {
+
         this.client = client;
- 
+        this.clientSocket = client.getSocket();
+
         try {
             InputStream serverMessage = clientSocket.getInputStream();
             reader = new BufferedReader(new InputStreamReader(serverMessage));
@@ -40,20 +41,32 @@ public class IRCreadingThread extends Thread {
 	 * Run method for the reading thread. Will run until cannot read from buffer. 
 	 */
     public void run() {
-        while (true) {
+
+        String fromServer;
+
+        while (client.socketConnected.get()) {
+
+
             try {
-				//prints to user terminal
-                System.out.println("\n" + reader.readLine());
- 
-                // prints the username 
-                if (client.getUserName() != null) {
-                    System.out.print("{" + client.getUserName() + "}: ");
-                }
+                //prints to user terminal
+
+                fromServer = reader.readLine();
+
+              System.out.println("\n" + fromServer);
+
+
+              System.out.print("{" + client.getUserName() + "}: ");
+
+
             } catch (IOException e) {
                 System.out.println("Could Not Read From The Server: " + e.getMessage());
-                e.printStackTrace();
                 break;
             }
+
+
         }
+
+
     }
+
 }

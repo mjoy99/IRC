@@ -3,25 +3,27 @@ package org.ece542.Client;
 import java.io.IOException;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Creates new IRCClient object with socket and 2 threads for simultaneous reading from and writing to server
  */
 public class IRCClient {
     private String hostname;
-    private String username;
-    private int portnum;
+    private String userName;
+    private final int port;
     private Socket clientSocket;
+    public AtomicBoolean socketConnected = new AtomicBoolean(false);
 
     /**
      * Effects: Constructor for IRCClient
      * @param hostname String IP Address or hostname of the server connecting to.
-     * @param portnum portnum used for IRC server
+     * @param port portnum used for IRC server
 	 *
      */
-    public IRCClient(String hostname,int portnum){
+    public IRCClient(String hostname,int port){
         this.hostname = hostname;
-        this.portnum = portnum;
+        this.port = port;
     }
     
     /**
@@ -30,16 +32,17 @@ public class IRCClient {
      *          Also Attaches input stream and output stream of Socket.
      */
     public void connectSocket(){
-        System.out.println("Enter your username for the chat:");
 
-		if(hostname != null && !(hostname.isEmpty()) && portnum>0){
+		if(hostname != null && !(hostname.isEmpty()) && port >0){
 			try {
-				this.clientSocket = new Socket(hostname, portnum);
+				this.clientSocket = new Socket(hostname, port);
+                socketConnected.set(true);
 				System.out.println("Socket is Connected");
 				//instantiates and starts the 2 threads for simultaneous reading from server and writing to server
-				new IRCreadingThread(clientSocket, this).start();
-				new IRCwritingThread(clientSocket, this).start();
-	 
+				new IRCreadingThread(this).start();
+				new IRCwritingThread(this).start();
+
+
 			} catch (UnknownHostException e) {
 				System.out.println("Server Not Located "+e.getMessage());
 			} catch (IOException ex) {
@@ -51,23 +54,26 @@ public class IRCClient {
     } 
     
 	/**
-     * Effects: returns the client's username
+     * Effects: returns the client's userName
      */
     public String getUserName(){
-        return username;
+        return userName;
     }
 	
      /**
-     * Effects: Changes this client's username if not null or empty
-     * @param username: the client's new proposed username
+     * Effects: Changes this client's userName if not null or empty
+     * @param username: the client's new proposed userName
      */
-    public void changeUsername(String username){
+    public void setUsername(String username){
         if(username == null || username.isEmpty())
             System.out.println("INVALID USERNAME");
         else{
-            this.username = username;
-            System.out.println("Username Changed to: "+this.username);
+            this.userName = username;
+            System.out.println("Username Changed to: "+this.userName);
         }
     }
 
+    public Socket getSocket() {
+        return clientSocket;
+    }
 }
