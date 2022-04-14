@@ -37,6 +37,8 @@ public class UserThread extends Thread{
             OutputStream outputStream = clientSocket.getOutputStream();
             writer = new PrintWriter(outputStream,true);
 
+            SendConnectionMessage();
+
             String userName = reader.readLine();
             serverMain.addUserName(userName);
 
@@ -63,6 +65,17 @@ public class UserThread extends Thread{
             System.out.println("Class: UserThread. Method: run. IOExcpetion on clientSocket.getInputStream.");
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Effects: Sends client message that connection was successful and a list of users connected.
+     */
+    private void SendConnectionMessage() {
+        writer.println("Connection to server successful.");
+        if (serverMain.HasUsers())
+            writer.println("All users connected: " + serverMain.getUserNames());
+        else
+            writer.println("No other users connected at this time.");
     }
 
     /**
