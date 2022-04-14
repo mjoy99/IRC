@@ -15,7 +15,16 @@ import java.util.concurrent.CopyOnWriteArraySet;
  */
 public class ServerMain {
 
-    private int PORTNUM;
+    private final int PORTNUM;
+
+    /**
+     * Effects: Gets the names of the users signed in to the server.
+     * @return Set of Usernames
+     */
+    public Set<String> getUserNames() {
+        return userNames;
+    }
+
     private Set<String> userNames = new HashSet<>();
     private Set<UserThread> userThreads = new CopyOnWriteArraySet<>();
 
@@ -37,6 +46,7 @@ public class ServerMain {
                 Socket socket = serverSocket.accept();
 
                 UserThread newUser = new UserThread(socket, this);
+
                 userThreads.add(newUser);
                 newUser.start();
             }
@@ -98,7 +108,7 @@ public class ServerMain {
                     "one command line argument containing port number");
         }
 
-        int port = Integer.getInteger(args[0]);
+        int port = Integer.parseInt(args[0]);
 
         ServerMain serverMain = new ServerMain(port);
 
@@ -108,4 +118,12 @@ public class ServerMain {
 
     }
 
+
+    /**
+     * Effects: returns true if users are connected.
+     * @return Boolean true for other users.
+     */
+    public boolean HasUsers() {
+        return !userNames.isEmpty();
+    }
 }
