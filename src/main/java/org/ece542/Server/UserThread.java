@@ -22,8 +22,8 @@ public class UserThread extends Thread{
     }
 
     /**
-     * Effects: reads lines from client socket.  First line is user name. Send broadcast to <bold>ServerMain</bold> new user
-     * has connected.  Sends broadcast to <bold>ServerMain</bold> for each new line received from client socket
+     * Effects: reads lines from client socket.  First line is user name. Send broadcast to <strong>ServerMain</strong> new user
+     * has connected.  Sends broadcast to <strong>ServerMain</strong> for each new line received from client socket
      * until "!exit" is received.  sends exit notification, closes client socket and removes user from userThread
      * Set.
      */

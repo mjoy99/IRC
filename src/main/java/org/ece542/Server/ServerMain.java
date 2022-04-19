@@ -8,8 +8,8 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
- * <bold>ServerMain class</bold> This class is the main entry point for the serverside application.  A Set of
- * user names and a Set of <bold>UserThread</bold>s which hold the client sockets for each connected user.
+ * <strong>ServerMain class</strong> This class is the main entry point for the serverside application.  A Set of
+ * user names and a Set of <strong>UserThread</strong>s which hold the client sockets for each connected user.
  * This class is run through terminal window and takes a single command line argument for the port number
  * the server will be listening for incoming socket requests on.
  */
@@ -33,7 +33,7 @@ public class ServerMain {
     }
 
     /**
-     * <bold>private start()</bold>
+     * <strong>private start()</strong>
      * Effects: starts a new ServerSocket, listens for incoming client requests.  Starts a
      * new thread for each client Socket accepted.
      */
